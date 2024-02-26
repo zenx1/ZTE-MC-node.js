@@ -50,7 +50,7 @@ const deleteResult = await router.sms.deleteMessage(123);
 const rebootResult = await router.reboot();
 ```
 
-## Special thanks to the folks who created original project:
+**Special thanks to the folks who created original project:**
 ```
 https://github.com/Kajkac/ZTE-MC-Home-assistant
 ```
