@@ -6,6 +6,8 @@ https://github.com/Kajkac/ZTE-MC-Home-assistant/blob/master/python_scripts/zte_t
 
 Reason why I created the project is that I needed the functionality from the project above but in node.js environment.
 
+I've only tested on MC801A but since original project also supports MC889 and MC888 this one might work for those routers too.
+
 ## Usage
 Clone this repository, run npm install and then import router.js class to your project and use it as follows:
 
