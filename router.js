@@ -106,8 +106,10 @@ class Router {
                 Cookie: await this.#getCookie()
             }).text();
 
+            const DEVICE_CONTROL_ONE_CHAR = String.fromCodePoint(17);
+
             const messages = JSON.parse(
-                responseBody.split('').join(' ')
+                responseBody.split(DEVICE_CONTROL_ONE_CHAR).join(' ')
             ).messages.map(message => ({
                 ...message,
                 content: utils.decodeMessage(message.content),
