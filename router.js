@@ -43,13 +43,15 @@ class Router {
         return result;
     }
 
-    #getCookie = async () => cookie.parse(
-        (
-            await this.#client.post({
-                goformId: 'LOGIN',
-                password: utils.sha256(utils.sha256(this.#password) + await this.#getLD())
-            }).headers()
-        ).getSetCookie()[0]
+    #getCookie = async () => (
+        await this.#client.post({
+            goformId: 'LOGIN',
+            password: utils.sha256(utils.sha256(this.#password) + await this.#getLD())
+        }).headers()
+    ).getSetCookie().map(cookies =>
+        cookie.parse(cookies)
+    ).find(cookies =>
+        cookies.stok
     ).stok;
 
     getVersion = async () => (
