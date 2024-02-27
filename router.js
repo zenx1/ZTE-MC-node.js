@@ -1,4 +1,3 @@
-import cookie from 'cookie';
 import utils from './utils.js';
 import Client from './client.js';
 const infoRequestParameters = utils.loadJSONFile('./info-request-parameters.json');
@@ -46,10 +45,8 @@ class Router {
     #getCookie = async () => this.#client.post({
         goformId: 'LOGIN',
         password: utils.sha256(utils.sha256(this.#password) + await this.#getLD())
-    }).headers().then(headers =>
-        headers.getSetCookie().map(cookies =>
-            cookie.parse(cookies)
-        ).find(cookies =>
+    }).parseCookies().then(parsedCookies =>
+        parsedCookies.find(cookies =>
             cookies.stok
         ).stok
     );

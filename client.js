@@ -1,3 +1,5 @@
+import cookie from 'cookie';
+
 const buildQueryString = (params) => `?${new URLSearchParams(params).toString()}`;
 
 class Client {
@@ -25,7 +27,12 @@ class Client {
     #buildResponse = (request) => ({
         text: () => request.then(response => response.text()),
         json: () => request.then(response => response.json()),
-        headers: () => request.then(response => response.headers)
+        headers: () => request.then(response => response.headers),
+        parseCookies: () => request.then(response =>
+            response.headers.getSetCookie().map(cookies =>
+                cookie.parse(cookies)
+            )
+        )
     });
 
     get(parameters, headers) {
