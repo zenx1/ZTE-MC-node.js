@@ -94,30 +94,25 @@ class Router {
             Cookie: await this.#getCookie()
         }).json(),
 
-        getMessages: async () => {
-            const responseBody = await this.#client.get({
-                cmd: 'sms_data_total',
-                page: 0,
-                data_per_page: 5000,
-                mem_store: 1,
-                tags: 10,
-                order_by: 'order+by+id+desc'
-            }, {
-                Cookie: await this.#getCookie()
-            }).text();
-
-            const DEVICE_CONTROL_ONE_CHAR = String.fromCodePoint(17);
-
-            const messages = JSON.parse(
-                responseBody.split(DEVICE_CONTROL_ONE_CHAR).join(' ')
+        getMessages: async () => await this.#client.get({
+            cmd: 'sms_data_total',
+            page: 0,
+            data_per_page: 5000,
+            mem_store: 1,
+            tags: 10,
+            order_by: 'order+by+id+desc'
+        }, {
+            Cookie: await this.#getCookie()
+        }).text().then(responseBody =>
+            JSON.parse(
+                // local operator sends 'DEVICE CONTROL ONE' character as a part of their phone number, which breaks json parsing so it needs to be removed 
+                responseBody.split(String.fromCodePoint(17)).join(' ')
             ).messages.map(message => ({
                 ...message,
                 content: utils.decodeMessage(message.content),
                 date: utils.decodeDateTime(message.date)
-            }));
-
-            return messages;
-        },
+            }))
+        ),
 
         sendMessage: async (phoneNumber, message) => await this.#client.post({
             goformId: 'SEND_SMS',
