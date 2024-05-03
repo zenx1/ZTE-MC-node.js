@@ -1,4 +1,5 @@
 import cookie from 'cookie';
+import fetch from 'node-fetch';
 
 const buildQueryString = (params) => `?${new URLSearchParams(params).toString()}`;
 
@@ -29,7 +30,7 @@ class Client {
         json: () => request.then(response => response.json()),
         headers: () => request.then(response => response.headers),
         parseCookies: () => request.then(response =>
-            response.headers.getSetCookie().map(cookies =>
+            response.headers.raw()['set-cookie'].map(cookies =>
                 cookie.parse(cookies)
             )
         )
